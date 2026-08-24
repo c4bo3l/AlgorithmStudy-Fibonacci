@@ -1,0 +1,18 @@
+benchmarks/FibBenchmarks/BenchmarkDotNet.Artifacts
+bin/
+obj/
+out/
+.*\.user
+*.exe
+*.pdb
+*.dll
+*.config
+.vs/
+.vscode/
+# Other common .NET ignores
+TestResults/
+_ReSharper.*/
+__resharper__/
+*.suo
+*.userosscache
+*.sln.docstates

@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/benchmarks/">
+    <Project Path="benchmarks/FibBenchmarks/FibBenchmarks.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/FibCore/FibCore.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/FibApp.Tests/FibApp.Tests.csproj" />
+  </Folder>
+</Solution>
