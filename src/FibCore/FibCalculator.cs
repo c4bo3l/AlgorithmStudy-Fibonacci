@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Numerics;
 
 /// <summary>
@@ -56,15 +57,19 @@ public static class FibonacciCalculator
     public static BigInteger FibonacciMatrix(int n)
     {
         if (n < 0) throw new ArgumentException("Invalid input: cannot be negative");
-        if (n == 0) return 0;
-        if (n == 1) return 1;
 
         var T = new Matrix2x2(1, 1, 1, 0);
-        var result = Power(T, n - 1);
+        var result = Power(T, n);
 
-        return result.M00;
+        return result.M10;
     }
 
+    /// <summary>
+    /// Calculates the nth Fibonacci number using fast doubling with O(log n) time complexity.
+    /// </summary>
+    /// <param name="n">The index of the Fibonacci number to calculate.</param>
+    /// <returns>The nth Fibonacci number as a BigInteger.</returns>
+    /// <exception cref="ArgumentException">Thrown when n is negative.</exception>
     public static BigInteger FibonacciFastDoubling(int n)
     {
         if (n < 0) throw new ArgumentException("Invalid input: cannot be negative");
@@ -84,15 +89,13 @@ public static class FibonacciCalculator
 
         var (a, b) = FastDoublingRecursive(n / 2);
 
-        // c = F_{2k} = F_k * (2*F_{k+1} - F_k)
+        // Compute both intermediate values to avoid redundant calculations in recursive calls.
+        // c = F_{2k} and d = F_{2k+1} are computed together since they're needed for either branch.
         BigInteger c = a * (2 * b - a);
-        // d = F_{2k+1} = F_{k+1}^2 + F_k^2
         BigInteger d = b * b + a * a;
 
-        if (n % 2 == 0)
-            return (c, d);
-        else
-            return (d, c + d);
+        if (n % 2 == 0) return (c, d);
+        else return (d, c + d);
     }
 
     /// <summary>
@@ -138,7 +141,7 @@ public static class FibonacciCalculator
     public static BigInteger[] GetFullSequence(int n)
     {
         if (n < 0) throw new ArgumentException("Invalid input: cannot be negative");
-        if (n > 1000000) Console.WriteLine("Warning: Generating a large sequence may consume significant memory.");
+        if (n > 1000000) LogWarning("Generating a large sequence may consume significant memory.");
         var fib = new BigInteger[n + 1];
         fib[0] = 0;
         if (n >= 1) fib[1] = 1;
@@ -149,8 +152,14 @@ public static class FibonacciCalculator
         return fib;
     }
 
+#if DEBUG
+    private static void LogWarning(string message) => System.Diagnostics.Debug.WriteLine(message);
+#else
+    private static void LogWarning(string message) { }
+#endif
+
     /// <summary>
-    /// Calculates the nth Fibonacci number by generating the full sequence up to that point (Legacy - for benchmarking).
+    /// Calculates the nth Fibonacci number by generating the full sequence up to that point.
     /// </summary>
     /// <param name="n">The index of the Fibonacci number to calculate.</param>
     /// <returns>The nth Fibonacci number as a BigInteger.</returns>
